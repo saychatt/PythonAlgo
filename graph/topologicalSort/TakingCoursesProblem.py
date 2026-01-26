@@ -42,7 +42,7 @@ class Solution(object):
                 for adjNode in adjList[curr]:
                     if not dfs(adjNode):
                         return False
-                        # remove from cycle
+                # remove from cycle
                 cycle.remove(curr)
                 # add as a successful visit
                 visited.add(curr)

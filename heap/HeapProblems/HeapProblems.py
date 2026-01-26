@@ -4,7 +4,41 @@ from typing import List
 
 
 class HeapProblems:
+    """
+    Given an integer array nums and an integer k, return the k most frequent elements within the array.
+    The test cases are generated such that the answer is always unique.
+    You may return the output in any order.
+    Example 1: Input: nums = [1,2,2,3,3,3], k = 2
+    Output: [2,3]
+    Example 2: Input: nums = [7,7], k = 1 Output: [7]
+    """
 
+    @staticmethod
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        # init the maps: [num to # of times], [# of times -> [val1, val2]]
+        freqMap = {}
+        # k min heap heap
+        kHeap = []
+        # final result containing the elements
+        result = []
+
+        # iterate over the list to map: num to # of times occurring
+        for num in nums:
+            freqMap[num] = 1 + freqMap.get(num, 0)
+        # for each value -> # times
+        for val in freqMap.keys():
+            # store the (freq, val) in the min heap
+            heapq.heappush(kHeap, (freqMap[val], val))
+            # if the length exists, then remove the minimal
+            if len(kHeap) > k:
+                heapq.heappop(kHeap)
+
+        # iterate of the top K
+        for i in range(k):
+            # take the 2nd element
+            result.append(heapq.heappop(kHeap)[1])
+
+        return result
 
     """
     You are given an array of CPU tasks tasks, where tasks[i] is an uppercase english character from A to Z. You are also given an integer n.
@@ -21,6 +55,7 @@ class HeapProblems:
     Explanation: A possible sequence is: A -> B -> C -> Idle -> A -> Idle -> Idle -> Idle -> A.
 
     """
+
     @staticmethod
     def leastInterval(tasks: List[str], n: int) -> int:
 
@@ -48,7 +83,7 @@ class HeapProblems:
                 # add the time in which it can be processed.
                 if taskOccurrence != 0:
                     q.append([taskOccurrence, time + n])
-            #check in the q if the element in the head can be popped and
+            # check in the q if the element in the head can be popped and
             # put back in the heap, if it's the suited time.
             if q and q[0][1] == time:
                 heapq.heappush(maxHeap, q.popleft()[0])
