@@ -48,9 +48,10 @@ class Solution(object):
                 visited.add(curr)
                 # append to the result
                 result.append(curr)
+                return True
 
             for curr in range(numCourses):
-                if dfs(curr) == False:
+                if not dfs(curr):
                     return []
             return result
 
