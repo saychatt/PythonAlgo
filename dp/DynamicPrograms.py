@@ -1,4 +1,37 @@
+from typing import List
+
+
 class DynamicPrograms:
+
+    """
+    https://neetcode.io/problems/coin-change/question
+    You are given an integer array coins representing coins of different
+    denominations (e.g. 1 dollar, 5 dollars, etc) and an integer amount
+    representing a target amount of money.Return the fewest number of coins
+    that you need to make up the exact target amount. If it is impossible
+    to make up the amount, return -1. You may assume that you have an unlimited number of each coin.
+    Example 1: Input: coins = [1,5,10], amount = 12 Output: 3
+    Explanation: 12 = 10 + 1 + 1. Note that we do not have to use every kind coin available.
+
+    Example 2: Input: coins = [2], amount = 3 Output: -1
+    Explanation: The amount of 3 cannot be made up with coins of 2.
+    Example 3: Input: coins = [1], amount = 0 Output: 0
+    Explanation: Choosing 0 coins is a valid way to make up 0.
+
+    """
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        dp = [amount + 1] * (amount + 1)
+        dp[0] = 0
+
+        for a in range(1, amount + 1):
+            for coin in coins:
+                if a - coin >= 0:
+                    dp[a] = min(dp[a], 1 + dp[a - coin])
+        return dp[amount] if dp[amount] != (amount + 1) else -1
+
+    """
+    Fibonacci
+    """
 
     def fib(self, n):
         if n < 2:
@@ -18,18 +51,13 @@ class DynamicPrograms:
             return nums[0]
         if len(nums) == 2:
             return max(nums[0], nums[1])
+        #these values will store the memoizations
+        prev1, prev2 = 0, 0
+        for value in nums:
+            #this is where you add and compare the local max
+            prev2, prev1 = max(prev1 + value, prev2), prev2
 
-        # this array would be used for memoization
-        prev = [nums[0], max(nums[0], nums[1])]
-
-        # starting with the 3rd house i.e. index 2
-        i = 2
-        while i < len(nums):
-            # core logic to select if adj house max
-            # or skip house max needs to be selected
-            prev[1], prev[0] = max(nums[i] + prev[0], prev[1]), prev[1]
-            i += 1
-        return prev[1]
+        return prev2
 
     #number of unique paths in given matrix to the bottom cell starting from [0,0]
     def uniquePaths(self, rows, cols):
@@ -50,6 +78,36 @@ class DynamicPrograms:
             prevRow = curRow
         #final value stored on the top left corner.
         return prevRow[0]
+
+    """
+    https://neetcode.io/problems/house-robber-ii/question
+    You are given an integer array nums where nums[i] represents the amount of money the ith house has. 
+    The houses are arranged in a circle, i.e. the first house and the last house are neighbors.
+    You are planning to rob money from the houses, but you cannot rob two adjacent houses because 
+    the security system will automatically alert the police if two adjacent houses were both broken into.
+    Return the maximum amount of money you can rob without alerting the police.
+    Example 1:  Input: nums = [3,4,3]   Output: 4
+    Explanation: You cannot rob nums[0] + nums[2] = 6 because nums[0] and nums[2] are adjacent houses. The maximum you can rob is nums[1] = 4.
+    Example 2:  Input: nums = [2,9,8,3,6]
+    Output: 15  Explanation: You cannot rob nums[0] + nums[2] + nums[4] = 16 because nums[0] and nums[4] are adjacent houses. The maximum you can rob is nums[1] + nums[4] = 15.
+    """
+
+    def circularRob(self, nums: List[int]) -> int:
+        if len(nums) == 1:
+            return nums[0]
+        if len(nums) == 2:
+            return max(nums[0], nums[1])
+
+        def simpleRob(houses):
+            prev1, prev2 = 0, 0
+            for value in houses:
+                prev2, prev1 = max(prev2, prev1 + value), prev2
+            return prev2
+        #run the cases for without the first house, and then without the last house. Take the max of the 2.
+        return max(simpleRob(nums[1:]), simpleRob(nums[:-1]))
+
+
+
 
     #https://neetcode.io/problems/longest-common-subsequence?list=neetcode150
     def longestCommonSubsequence(self, text1: str, text2: str) -> int:
