@@ -17,22 +17,22 @@ class BacktrackingProblems:
         # on the right side we do not include the number
         currSet, resultSet = [], []
 
-        def helper(i):
+        def dfs(i):
             if i >= len(nums):
                 # as the currSet will change during recursion
                 resultSet.append(currSet.copy())
                 return
-                # include the next number: left branch
+            # include the next number: left branch
             currSet.append(nums[i])
-            helper(i + 1)
+            #explore with the number included
+            dfs(i + 1)
 
             # remove the number
             currSet.pop()
-            helper(i + 1)
-            # call the helper function which will recurse
-
+            #explore again without the number
+            dfs(i + 1)
         # call the recursive function
-        helper(0)
+        dfs(0)
         return resultSet
 
 
