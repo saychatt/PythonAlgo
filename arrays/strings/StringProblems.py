@@ -2,7 +2,38 @@ from typing import List
 
 
 class StringOperations:
-    # https://neetcode.io/problems/minimum-remove-to-make-valid-parentheses
+
+    """
+    Given a string s, find the length of the longest substring without duplicate characters.
+    A substring is a contiguous sequence of characters within a string.
+
+    Example 1:  Input: s = "zxyzxyz"    Output: 3
+    Explanation: The string "xyz" is the longest without duplicate characters.
+    Example 2:  Input: s = "xxxx"   Output: 1
+    """
+    @staticmethod
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        result = 0
+        #keeps the unique chars
+        charSet = set()
+        #init the left pointer at the first element
+        left = 0
+        for right in range(len(s)):
+            # if the char exists then; keep removing left char from set
+            while s[right] in charSet:
+                charSet.remove(s[left])
+                # increase the left pointer;
+                left += 1
+            # add the non-repeated character
+            charSet.add(s[right])
+            # take the max of the previous length or the new length
+            result = max(result, right - left + 1)
+        return result
+
+
+
+
+    #https://neetcode.io/problems/minimum-remove-to-make-valid-parentheses
     @staticmethod
     def minParanRemoveToMakeValid(self, s:str) -> str:
 
@@ -63,6 +94,7 @@ class StringOperations:
             return result
         dfs(0, "")
         return result
+
 
 
 

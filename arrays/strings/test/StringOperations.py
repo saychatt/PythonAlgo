@@ -1,6 +1,6 @@
 import unittest
 
-from arrays.strings.StringOperations import StringOperations
+from arrays.strings.StringProblems import StringOperations
 
 
 class MyTestCase(unittest.TestCase):
